@@ -1,46 +1,52 @@
-// src/pages/HomePage.js
-import React, { useContext } from 'react';
-import { Link, Navigate } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+// client/src/pages/HomePage.jsx
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const HomePage = () => {
-  const { isAuthenticated } = useContext(AuthContext);
-
-  // If user is already logged in, redirect to dashboard
-  if (isAuthenticated) {
-    return <Navigate to="/dashboard" />;
-  }
+  const { isAuthenticated } = useAuth();
 
   return (
     <div className="container mx-auto px-4">
-      <div className="min-h-[80vh] flex items-center">
+      <div className="min-h-[70vh] flex items-center">
         <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-10">
           <div className="flex flex-col justify-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
               Training Management System
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Streamline your training programs with our comprehensive management platform.
-              Track progress, manage courses, and improve learning outcomes.
+              Streamline your training programs with our comprehensive platform.
+              Track progress, manage courses, and enhance your learning experience.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                to="/login"
-                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg text-center"
-              >
-                Sign In
-              </Link>
-              <Link
-                to="/register"
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg text-center"
-              >
-                Register
-              </Link>
+              {!isAuthenticated ? (
+                <>
+                  <Link
+                    to="/login"
+                    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg text-center"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-6 rounded-lg text-center"
+                  >
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  to="/dashboard"
+                  className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg text-center"
+                >
+                  Go to Dashboard
+                </Link>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-center">
             <div className="bg-blue-100 w-full h-[400px] rounded-xl flex items-center justify-center">
-              <span className="text-6xl">📚</span>
+              <div className="text-6xl">📚</div>
             </div>
           </div>
         </div>

@@ -1,10 +1,10 @@
-// src/pages/DashboardPage.js
-import React, { useContext, useState, useEffect } from 'react';
+// client/src/pages/DashboardPage.jsx
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 const DashboardPage = () => {
-  const { user } = useContext(AuthContext);
+  const { currentUser } = useAuth();
   const [stats, setStats] = useState({
     enrolledCourses: 0,
     completedCourses: 0,
@@ -14,23 +14,34 @@ const DashboardPage = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Mock loading data
-    setTimeout(() => {
-      setStats({
-        enrolledCourses: 3,
-        completedCourses: 1,
-        attendanceRate: 85,
-        upcomingTraining: [
-          {
-            id: 1,
-            title: 'Introduction to React',
-            date: '2025-05-10',
-            time: '10:00 AM'
-          }
-        ]
-      });
-      setLoading(false);
-    }, 1000);
+    // Simulate loading data
+    const fetchData = async () => {
+      try {
+        // Here you would typically fetch actual data from your API
+        // For now, using setTimeout to simulate async operation
+        setTimeout(() => {
+          setStats({
+            enrolledCourses: 3,
+            completedCourses: 1,
+            attendanceRate: 85,
+            upcomingTraining: [
+              {
+                id: 1,
+                title: 'Introduction to React',
+                date: '2025-05-10',
+                time: '10:00 AM'
+              }
+            ]
+          });
+          setLoading(false);
+        }, 1000);
+      } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   const renderTraineeContent = () => (
@@ -93,7 +104,7 @@ const DashboardPage = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-semibold mb-4">Attendance Management</h2>
         <p className="text-gray-600 mb-4">Track attendance for your trainees.</p>
-        <Link to="/attendance-management" className="block bg-blue-500 text-white rounded py-2 px-4 text-center">
+        <Link to="/attendance" className="block bg-blue-500 text-white rounded py-2 px-4 text-center">
           Manage Attendance
         </Link>
       </div>
@@ -129,9 +140,9 @@ const DashboardPage = () => {
   );
 
   const renderDashboardContent = () => {
-    if (!user) return null;
+    if (!currentUser) return null;
 
-    switch (user.role) {
+    switch (currentUser.role) {
       case 'trainee':
         return renderTraineeContent();
       case 'trainer':
@@ -148,16 +159,17 @@ const DashboardPage = () => {
     <div className="container mx-auto mt-8 p-4">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
       
-      {user && (
+      {currentUser && (
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-xl font-semibold">Welcome, {user.firstName}!</h2>
-          <p className="text-gray-600">Your role: {user.role}</p>
+          <h2 className="text-xl font-semibold">Welcome, {currentUser.firstName}!</h2>
+          <p className="text-gray-600">Your role: {currentUser.role}</p>
         </div>
       )}
 
       {loading ? (
         <div className="text-center py-10">
-          <p>Loading dashboard data...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mx-auto"></div>
+          <p className="mt-4">Loading dashboard data...</p>
         </div>
       ) : (
         renderDashboardContent()

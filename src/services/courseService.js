@@ -1,37 +1,85 @@
-import axios from 'axios';
+// client/src/services/courseService.js
+const API_URL = '/api/courses';
+
+// Helper function to handle response
+const handleResponse = async (response) => {
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong');
+  }
+  return data;
+};
+
+// Get auth header
+const authHeader = () => {
+  const token = localStorage.getItem('token');
+  return token ? { 'Authorization': `Bearer ${token}` } : {};
+};
 
 // Get all courses
-export const getCourses = async () => {
-  const res = await axios.get('/api/courses');
-  return res.data;
+const getAllCourses = async () => {
+  const response = await fetch(API_URL, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  return handleResponse(response);
 };
 
-// Get single course
-export const getCourse = async (id) => {
-  const res = await axios.get(`/api/courses/${id}`);
-  return res.data;
+// Get course by ID
+const getCourseById = async (courseId) => {
+  const response = await fetch(`${API_URL}/${courseId}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  });
+  return handleResponse(response);
 };
 
-// Create new course (trainer/manager only)
-export const createCourse = async (courseData) => {
-  const res = await axios.post('/api/courses', courseData);
-  return res.data;
+// Create a new course (trainer/manager only)
+const createCourse = async (courseData) => {
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(courseData)
+  });
+  return handleResponse(response);
 };
 
-// Update course (trainer/manager only)
-export const updateCourse = async (id, courseData) => {
-  const res = await axios.put(`/api/courses/${id}`, courseData);
-  return res.data;
+// Update a course (trainer/manager only)
+const updateCourse = async (courseId, courseData) => {
+  const response = await fetch(`${API_URL}/${courseId}`, {
+    method: 'PUT',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(courseData)
+  });
+  return handleResponse(response);
 };
 
-// Delete course (manager only)
-export const deleteCourse = async (id) => {
-  const res = await axios.delete(`/api/courses/${id}`);
-  return res.data;
+// Delete a course (trainer/manager only)
+const deleteCourse = async (courseId) => {
+  const response = await fetch(`${API_URL}/${courseId}`, {
+    method: 'DELETE',
+    headers: {
+      ...authHeader(),
+      'Content-Type': 'application/json'
+    }
+  });
+  return handleResponse(response);
 };
 
-// Add material to course (trainer/manager only)
-export const addMaterial = async (courseId, materialData) => {
-  const res = await axios.post(`/api/courses/${courseId}/materials`, materialData);
-  return res.data;
+const courseService = {
+  getAllCourses,
+  getCourseById,
+  createCourse,
+  updateCourse,
+  deleteCourse
 };
+
+export default courseService;
