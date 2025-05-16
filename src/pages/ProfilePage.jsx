@@ -164,7 +164,7 @@ const ProfilePage = () => {
               
               <div>
                 <p className="text-sm text-gray-500">Role</p>
-                <p className="text-lg capitalize">{currentUser.role.replace('_', ' ')}</p>
+                <p className="text-lg capitalize">{currentUser.role ? currentUser.role.replace('_', ' ') : ''}</p>
               </div>
             </div>
           )}
