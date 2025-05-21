@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { AuthContext } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 import { 
   FaHome, 
   FaBook, 
@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const location = useLocation();
 
   const isActive = (path) => {

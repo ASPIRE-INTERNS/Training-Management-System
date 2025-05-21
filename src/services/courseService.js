@@ -1,7 +1,6 @@
-// client/src/services/courseService.js
-const API_URL = '/api/courses';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3000';
 
-// Helper function to handle response
+// Handle response utility
 const handleResponse = async (response) => {
   const data = await response.json();
   if (!response.ok) {
@@ -18,9 +17,10 @@ const authHeader = () => {
 
 // Get all courses
 const getAllCourses = async () => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${BACKEND_URL}/api/courses`, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...authHeader()
     }
   });
   return handleResponse(response);
@@ -28,9 +28,10 @@ const getAllCourses = async () => {
 
 // Get course by ID
 const getCourseById = async (courseId) => {
-  const response = await fetch(`${API_URL}/${courseId}`, {
+  const response = await fetch(`${BACKEND_URL}/api/courses/${courseId}`, {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      ...authHeader()
     }
   });
   return handleResponse(response);
@@ -38,7 +39,7 @@ const getCourseById = async (courseId) => {
 
 // Create a new course (trainer/manager only)
 const createCourse = async (courseData) => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${BACKEND_URL}/api/courses`, {
     method: 'POST',
     headers: {
       ...authHeader(),
@@ -51,7 +52,7 @@ const createCourse = async (courseData) => {
 
 // Update a course (trainer/manager only)
 const updateCourse = async (courseId, courseData) => {
-  const response = await fetch(`${API_URL}/${courseId}`, {
+  const response = await fetch(`${BACKEND_URL}/api/courses/${courseId}`, {
     method: 'PUT',
     headers: {
       ...authHeader(),
@@ -64,7 +65,7 @@ const updateCourse = async (courseId, courseData) => {
 
 // Delete a course (trainer/manager only)
 const deleteCourse = async (courseId) => {
-  const response = await fetch(`${API_URL}/${courseId}`, {
+  const response = await fetch(`${BACKEND_URL}/api/courses/${courseId}`, {
     method: 'DELETE',
     headers: {
       ...authHeader(),

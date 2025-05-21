@@ -38,6 +38,13 @@ const Navbar = () => {
               >
                 My Trainings
               </Link>
+
+              <Link 
+                to="/live-sessions" 
+                className={location.pathname === '/live-session' ? 'active' : ''}
+              >
+                Live Sessions
+              </Link>
               
               <div className="navbar-right">
                 <Link to="/profile" className="profile-link">

@@ -1,13 +1,13 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
-import { getMyEnrollments } from '../services/enrollmentService';
+import enrollmentService from '../services/enrollmentService';
 import { getMyAttendance } from '../services/attendanceService';
 import { Link } from 'react-router-dom';
 import { FaBook, FaCalendarAlt, FaCheckCircle, FaClock } from 'react-icons/fa';
 
 const TraineeDashboard = () => {
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [enrollments, setEnrollments] = useState([]);
   const [attendance, setAttendance] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -17,14 +17,14 @@ const TraineeDashboard = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const enrollmentsData = await getMyEnrollments();
+        const enrollmentsData = await enrollmentService();
         const attendanceData = await getMyAttendance();
         
         setEnrollments(enrollmentsData);
         setAttendance(attendanceData);
         setLoading(false);
       } catch (error) {
-        setError('Failed to load dashboard data');
+        // setError('Failed to load dashboard data');
         setLoading(false);
       }
     };
@@ -184,6 +184,92 @@ const TraineeDashboard = () => {
                 )}
               </div>
             )}
+          </div>
+        </div>
+
+        {/* Live Sessions Section */}
+        <div className="bg-white p-6 rounded-lg shadow-md mt-6">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold">Live Sessions</h2>
+            <Link to="/live-sessions" className="text-sm text-blue-600 hover:text-blue-800">View all sessions</Link>
+          </div>
+          
+          {/* Active Sessions */}
+          <div className="mb-4">
+            <h3 className="font-medium text-gray-700 mb-2">Active Now</h3>
+            <div className="space-y-3">
+              {/* Replace with actual live sessions data */}
+              {loading ? (
+                <p>Loading sessions...</p>
+              ) : (
+                <>
+                  <div className="border border-green-200 bg-green-50 rounded-lg p-4">
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <h4 className="font-medium">Advanced React Patterns</h4>
+                        <p className="text-sm text-gray-600">Instructor: John Smith</p>
+                      </div>
+                      <div>
+                        <span className="flex items-center text-green-600 mr-2">
+                          <span className="relative flex h-3 w-3 mr-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                          </span>
+                          Live Now
+                        </span>
+                        <Link 
+                          to="/live-session/123" 
+                          className="mt-2 inline-block bg-blue-600 text-white text-sm py-2 px-4 rounded hover:bg-blue-700"
+                        >
+                          Join Session
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* If no active sessions */}
+                  {/* 
+                  <div className="text-center py-4 text-gray-500">
+                    No active sessions at the moment
+                  </div>
+                  */}
+                </>
+              )}
+            </div>
+          </div>
+          
+          {/* Upcoming Sessions */}
+          <div>
+            <h3 className="font-medium text-gray-700 mb-2">Upcoming</h3>
+            <div className="space-y-3">
+              <div className="border rounded-lg p-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h4 className="font-medium">JavaScript Fundamentals</h4>
+                    <p className="text-sm text-gray-600">Tomorrow at 10:00 AM</p>
+                  </div>
+                  <button 
+                    className="text-sm bg-gray-200 text-gray-800 py-1 px-3 rounded hover:bg-gray-300"
+                  >
+                    Set Reminder
+                  </button>
+                </div>
+              </div>
+              
+              <div className="border rounded-lg p-4">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h4 className="font-medium">Database Design</h4>
+                    <p className="text-sm text-gray-600">May 20, 2:00 PM</p>
+                  </div>
+                  <button 
+                    className="text-sm bg-gray-200 text-gray-800 py-1 px-3 rounded hover:bg-gray-300"
+                  >
+                    Set Reminder
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
