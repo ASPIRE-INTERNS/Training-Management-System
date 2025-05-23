@@ -1,6 +1,7 @@
 // client/src/pages/AttendancePage.jsx
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { calculateAttendanceSummary } from '../utils/attendanceUtils';
 
 const AttendancePage = () => {
   const { currentUser } = useAuth();

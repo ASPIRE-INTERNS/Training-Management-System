@@ -237,7 +237,7 @@ const LiveSessionsPage = () => {
                     
                     <div className="flex space-x-2">
                       <Link 
-                        to={`/live-session/${session._id}`} 
+                        to={`/training-sessions/${session._id}`}
                         className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                       >
                         Join Session

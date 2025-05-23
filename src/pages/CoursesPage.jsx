@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import courseService from '../services/courseService';
+import enrollmentService from '../services/enrollmentService';
 
 const CoursesPage = () => {
   const [courses, setCourses] = useState([]);
@@ -25,6 +26,16 @@ const CoursesPage = () => {
 
     fetchCourses();
   }, []);
+
+  const handleEnroll = async (courseId) => {
+  try {
+    await enrollmentService.enroll(courseId);
+    alert("Enrollment successful!");
+  } catch (err) {
+    console.error("Enrollment error:", err);
+    alert("Failed to enroll. You might already be enrolled.");
+  }
+};
 
   const isAdmin = currentUser && 
     (currentUser.role === 'trainer' || 
@@ -88,10 +99,12 @@ const CoursesPage = () => {
                     View Details
                   </Link>
                   {currentUser && currentUser.role === 'trainee' && (
-                    <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
+                    <button onClick={() => handleEnroll(course._id)}
+                    className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"
+                    >
                       Enroll Now
-                    </button>
-                  )}
+                      </button>
+                    )}
                 </div>
               </div>
             </div>

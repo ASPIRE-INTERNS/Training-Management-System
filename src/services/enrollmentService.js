@@ -28,7 +28,7 @@ const getMyEnrollments = async () => {
 };
 
 // Enroll in a course
-const enrollInCourse = async (courseId) => {
+const enroll = async (courseId) => {
   const response = await fetch(API_URL, {
     method: 'POST',
     headers: {
@@ -78,7 +78,7 @@ const getEnrollmentStats = async () => {
 
 const enrollmentService = {
   getMyEnrollments,
-  enrollInCourse,
+  enroll,
   updateProgress,
   markAsCompleted,
   getEnrollmentStats

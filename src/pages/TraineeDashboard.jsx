@@ -3,8 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import Sidebar from '../components/Sidebar';
 import enrollmentService from '../services/enrollmentService';
 import { getMyAttendance } from '../services/attendanceService';
+import { calculateAttendanceSummary } from '../utils/attendanceUtils';
 import { Link } from 'react-router-dom';
-import { FaBook, FaCalendarAlt, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { FaBook, FaCalendarCheck, FaCheckCircle, FaClock } from 'react-icons/fa';
 
 const TraineeDashboard = () => {
   const { user } = useAuth();
@@ -51,7 +52,7 @@ const TraineeDashboard = () => {
   // Calculate dashboard stats
   const completedCourses = enrollments.filter(e => e.completed).length;
   const inProgressCourses = enrollments.filter(e => !e.completed).length;
-  const upcomingAttendance = attendance.filter(a => new Date(a.date) > new Date()).length;
+  const summary = calculateAttendanceSummary(attendance);
   const averageProgress = enrollments.length 
     ? Math.round(enrollments.reduce((sum, enr) => sum + enr.progress, 0) / enrollments.length) 
     : 0;
@@ -110,7 +111,7 @@ const TraineeDashboard = () => {
             </div>
           </div>
           
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          {/* <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex items-center mb-4">
               <div className="bg-orange-100 p-3 rounded-full mr-4">
                 <FaCalendarAlt className="text-orange-500 text-xl" />
@@ -120,12 +121,27 @@ const TraineeDashboard = () => {
                 <h3 className="text-2xl font-bold">{upcomingAttendance}</h3>
               </div>
             </div>
-            <Link to="/attendance" className="text-orange-500 text-sm hover:underline">View attendance</Link>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Link to="/attendance" className="text-orange-500 text-sm hover:underline">View sessions</Link>
+          </div> */}
+
           <div className="bg-white p-6 rounded-lg shadow-md">
+  <div className="flex items-center mb-4">
+    <div className="bg-green-100 p-3 rounded-full mr-4">
+      <FaCalendarCheck className="text-green-500 text-xl" />
+    </div>
+    <div>
+      <p className="text-gray-500">Attendance</p>
+      <h3 className="text-2xl font-bold">{summary.percentage}%</h3>
+    </div>
+  </div>
+  <div className="w-full bg-gray-200 rounded-full h-2.5">
+    <div className="bg-green-500 h-2.5 rounded-full" style={{ width: `${summary.percentage}%` }}></div>
+  </div>
+  <Link to="/attendance" className="text-blue-500 text-sm hover:underline">View my attendance</Link>
+</div>
+
+                    
+          {/* <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">My Courses</h2>
             {enrollments.length === 0 ? (
               <p className="text-gray-500">You haven't enrolled in any courses yet.</p>
@@ -152,9 +168,9 @@ const TraineeDashboard = () => {
                 )}
               </div>
             )}
-          </div>
+          </div> */}
           
-          <div className="bg-white p-6 rounded-lg shadow-md">
+          {/* <div className="bg-white p-6 rounded-lg shadow-md">
             <h2 className="text-xl font-semibold mb-4">Recent Attendance</h2>
             {attendance.length === 0 ? (
               <p className="text-gray-500">No attendance records found.</p>
@@ -184,7 +200,7 @@ const TraineeDashboard = () => {
                 )}
               </div>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Live Sessions Section */}

@@ -16,8 +16,11 @@ import LiveSessionPage from './pages/LiveSessionPage';
 import NotFoundPage from './pages/NotFoundPage';
 import TrainerDashboard from './pages/TrainerDashboard';
 import TraineeDashboard from './pages/TraineeDashboard';
-// import MyCoursesPage from './pages/MyCoursesPage';
+import MyCoursesPage from './pages/MyCoursesPage';
+import CourseDetailsPage from './pages/CourseDetailsPage';
+import AttendancePage from './pages/AttendancePage';
 import './App.css';
+import { WebSocketProvider } from './context/WebSocketContext';
 
 const DashboardRouter = () => {
   const { user, loading } = useAuth();
@@ -52,6 +55,7 @@ function App() {
   return (
     <Router>
       <useAuth>
+        <WebSocketProvider>
         <div className="app-container">
           <Navbar />
           <main className="main-content">
@@ -61,16 +65,19 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/my-trainings" element={<ProtectedRoute><MyTrainingsPage /></ProtectedRoute>} />
-              {/* <Route path="/my-courses" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} /> */}
+              <Route path="/my-courses" element={<ProtectedRoute><MyCoursesPage /></ProtectedRoute>} />
+              <Route path="/courses/:id" element={<ProtectedRoute><CourseDetailsPage /></ProtectedRoute>} />
+              <Route path="/attendance" element={<ProtectedRoute><AttendancePage /></ProtectedRoute>} />
               <Route path="/courses" element={<ProtectedRoute><CoursesPage /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
               <Route path="*" element={<NotFoundPage />} />
               <Route path="/live-sessions" element={<ProtectedRoute><LiveSessionsPage /></ProtectedRoute>} />
-        {/* <Route path="/live-session/:sessionId" element={<LiveSessionPage />} />  */}
+        <Route path="/training-sessions/:id" element={<LiveSessionPage />} /> 
         {/* <Route path="/create-session" element={<CreateSessionPage />} /> */}
             </Routes>
           </main>
         </div>
+        </WebSocketProvider>
       </useAuth>
     </Router>
   );

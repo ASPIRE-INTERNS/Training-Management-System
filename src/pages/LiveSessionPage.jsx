@@ -9,6 +9,7 @@ import './LiveSessionPage.css';
 
 const LiveSessionPage = () => {
   const { id } = useParams();
+  console.log("Session ID from URL:", id);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { joinSession, leaveSession, connected } = useWebSocket();
